@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -46,6 +47,9 @@ TagManager:
     locked: 0
   - name: Tree
     uniqueID: 1459832325
+    locked: 0
+  - name: Missile
+    uniqueID: 1503262063
     locked: 0
   - name: Player
     uniqueID: 3669032899
