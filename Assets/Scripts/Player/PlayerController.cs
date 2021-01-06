@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     //private Animator anim;
     private Rigidbody2D myRigidbody;
     private Missile missile;
+    private Animator anim;
+    private Collider2D myCollider;
 
     public float xAxis;
 
@@ -23,6 +25,18 @@ public class PlayerController : MonoBehaviour
     public GameObject missilePrefabs;
     public Transform missilePos;
 
+    [Header("Staff Throw Message")]
+    public Transform myStaff;
+    public Transform newStaffParent;
+    private Transform oldStaffParent;
+    private Vector3 oldStaffLocalPosition;
+
+    [Header("Roll Message")]
+    public float rollDistance;
+    public float rollDistanceSmooth;
+    public float rollDelta;
+    public Vector3 rollTargetPosition;
+
     [Header("Ground Check")]
     public Transform checkPoint;
     public float checkRadius;
@@ -30,13 +44,26 @@ public class PlayerController : MonoBehaviour
 
     [Header("State")]
     public bool isGround;
+
+    public bool canJump;
     public bool isJump;
+
+    public bool canMagic;
     public bool isMagic;
+
+    public bool haveStaff;
+    public int magicKind;
+
+    public bool canRoll;
+    public bool isRoll;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        myCollider = GetComponent<Collider2D>();
+        oldStaffLocalPosition = myStaff.localPosition;
     }
 
     // Update is called once per frame
@@ -46,6 +73,9 @@ public class PlayerController : MonoBehaviour
         {
             isJump = false;
         }
+
+        haveStaff = myStaff.parent != newStaffParent;
+
         CheckInput();
         StateCheck();
     }
@@ -59,6 +89,10 @@ public class PlayerController : MonoBehaviour
 
     public void Movement() 
     {
+        if (isRoll) 
+        {
+            return;
+        }
         xAxis = Input.GetAxis("Horizontal");
         float speed = Mathf.Abs(xAxis) < 0.3 ? walkSpeed : runSpeed;
         if (xAxis != 0) 
@@ -66,6 +100,7 @@ public class PlayerController : MonoBehaviour
             //翻转
             transform.rotation = xAxis < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0); 
         }
+
         myRigidbody.velocity = new Vector2(speed * xAxis, myRigidbody.velocity.y);
     }
 
@@ -73,15 +108,17 @@ public class PlayerController : MonoBehaviour
     {
         if(isGround)
         {
-            if (Input.GetButtonDown("Magic"))
+            if (canMagic && Input.GetButtonDown("Magic"))
             {
                 isMagic = true;
+                magicKind = 0;
                 //产生飞弹
                 missile = Instantiate(missilePrefabs, missilePos.position, Quaternion.identity).GetComponent<Missile>();
             }
-            else if (Input.GetButtonUp("Magic"))
+            else if (isMagic && Input.GetButtonUp("Magic"))
             {
                 isMagic = false;
+                magicKind = -1;
                 //结束发射飞弹 
                 if (missile != null)
                 {
@@ -92,7 +129,7 @@ public class PlayerController : MonoBehaviour
                     missile = null;
                 }
             }
-            else if (Input.GetButton("Magic"))
+            else if (isMagic && Input.GetButton("Magic"))
             {
                 //飞弹跟随
                 if (missile != null)
@@ -100,12 +137,35 @@ public class PlayerController : MonoBehaviour
                     missile.FollowCreatingPos(missilePos);
                 }
             }
+            if (Input.GetButtonDown("Staff Throw"))
+            {
+                if (haveStaff)
+                {
+                    //丢法杖
+                    anim.SetTrigger("throw");
+                }
+                else if(canMagic)
+                {
+                    //瞬移到法杖处
+                    transform.position = myStaff.position;
+                    myStaff.parent = oldStaffParent;
+                    myStaff.localPosition = oldStaffLocalPosition;
+                    myStaff.localRotation = Quaternion.identity;
+                    myStaff.GetComponent<StaffRotate>().enabled = false;
+                    haveStaff = true;
+                }
+            }
+            if (canRoll && Input.GetButtonDown("Roll"))
+            {
+                anim.SetTrigger("roll");
+                rollTargetPosition = transform.position + new Vector3(rollDistance * transform.right.x, 0, 0);
+            }
         }
     }
 
     public void Jump()
     {
-        if (Input.GetButton("Jump") && isGround)
+        if (canJump && Input.GetButton("Jump"))
         {
             //进行跳跃，取消当前所有操作
             isJump = true;
@@ -113,12 +173,30 @@ public class PlayerController : MonoBehaviour
             myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpForce);
         }
     }
+
     //状态检查
     //对当前状态进行行为处理
     public void StateCheck()
     {
-        //跳跃和下落时，需要取消施法动作
-        if (isJump || myRigidbody.velocity.y < 0)
+        isRoll = anim.GetCurrentAnimatorStateInfo(2).IsName("Roll");
+
+        //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态
+        canJump = isGround && !isRoll && !isJump;
+        //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/
+        canMagic = isGround && !isRoll && !isMagic; //&& haveStaff;
+        //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态
+        canRoll = isGround && !isJump && !isRoll;
+
+        if (isRoll && Vector3.Distance(transform.position, rollTargetPosition) > rollDistanceSmooth)
+        {
+            //清除移动时残留的速度
+            myRigidbody.velocity = Vector3.zero;
+
+            transform.position = Vector3.MoveTowards(transform.position, rollTargetPosition, rollDelta * Time.deltaTime);
+        }
+
+        //翻滚、跳跃和下落时，需要取消施法动作
+        if (isRoll || isJump || myRigidbody.velocity.y < 0)
         {
             isMagic = false;
             //销毁生成的missile
@@ -133,6 +211,29 @@ public class PlayerController : MonoBehaviour
     public void PhysicCheck()
     {
         isGround = Physics2D.OverlapCircle(checkPoint.position, checkRadius, groundLayer);
+    }
+
+    //动画事件(丢法杖)
+    public void ThrowStaff()
+    {
+        oldStaffParent = myStaff.parent;
+        myStaff.parent = newStaffParent;
+        myStaff.GetComponent<StaffRotate>().enabled = true;
+        haveStaff = false;
+    }
+
+    //动画事件(翻滚)
+    //无敌帧生效
+    public void RollInvincibleStart()
+    {
+        myRigidbody.bodyType = RigidbodyType2D.Kinematic;
+        myCollider.enabled = false;
+    }
+    //无敌帧结束
+    public void RollInvincibleEnd()
+    {
+        myRigidbody.bodyType = RigidbodyType2D.Dynamic;
+        myCollider.enabled = true;
     }
 
     public void OnDrawGizmos()

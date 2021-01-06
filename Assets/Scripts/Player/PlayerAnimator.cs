@@ -24,5 +24,6 @@ public class PlayerAnimator : MonoBehaviour
         anim.SetBool("isGround", playerController.isGround);
         anim.SetFloat("velocity_y", myRigidbody.velocity.y);
         anim.SetBool("isMagic", playerController.isMagic);
+        anim.SetFloat("magicKind", playerController.magicKind);
     }
 }
