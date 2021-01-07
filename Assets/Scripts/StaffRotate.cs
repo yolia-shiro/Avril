@@ -10,10 +10,14 @@ public class StaffRotate : MonoBehaviour
 
     private bool isRotating;
     private Rigidbody2D staffRigidbody;
+    private Collider2D myCollider;
     // Start is called before the first frame update
 
     private void OnEnable()
     {
+        myCollider = GetComponentInChildren<Collider2D>();
+        myCollider.enabled = true;
+
         isRotating = true;
         staffRigidbody = GetComponent<Rigidbody2D>();
         staffRigidbody.bodyType = RigidbodyType2D.Dynamic;
@@ -23,6 +27,7 @@ public class StaffRotate : MonoBehaviour
 
     private void OnDisable()
     {
+        myCollider.enabled = false;
         staffRigidbody.bodyType = RigidbodyType2D.Kinematic;
         staffRigidbody.velocity = Vector2.zero;
     }

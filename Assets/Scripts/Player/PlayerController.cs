@@ -57,6 +57,9 @@ public class PlayerController : MonoBehaviour
     public bool canRoll;
     public bool isRoll;
 
+    public bool canAttack;
+    public bool isAttack;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,7 +92,7 @@ public class PlayerController : MonoBehaviour
 
     public void Movement() 
     {
-        if (isRoll) 
+        if (isRoll || isAttack) 
         {
             return;
         }
@@ -160,6 +163,11 @@ public class PlayerController : MonoBehaviour
                 anim.SetTrigger("roll");
                 rollTargetPosition = transform.position + new Vector3(rollDistance * transform.right.x, 0, 0);
             }
+            if (canAttack && Input.GetButtonDown("Attack"))
+            {
+                anim.SetTrigger("attack");
+                isAttack = true;
+            }
         }
     }
 
@@ -179,13 +187,16 @@ public class PlayerController : MonoBehaviour
     public void StateCheck()
     {
         isRoll = anim.GetCurrentAnimatorStateInfo(2).IsName("Roll");
+        isAttack = anim.GetCurrentAnimatorStateInfo(3).IsName("Physic Attack");
 
-        //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态
-        canJump = isGround && !isRoll && !isJump;
-        //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/
-        canMagic = isGround && !isRoll && !isMagic; //&& haveStaff;
-        //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态
-        canRoll = isGround && !isJump && !isRoll;
+        //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态; 不在攻击状态;
+        canJump = isGround && !isRoll && !isJump && !isAttack;
+        //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/ 不在攻击状态;
+        canMagic = isGround && !isRoll && !isMagic && !isAttack; //&& haveStaff;
+        //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在攻击状态;
+        canRoll = isGround && !isJump && !isRoll && !isAttack;
+        //攻击的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在释放魔法状态; 不在攻击状态; 有法杖
+        canAttack = isGround && !isJump && !isRoll && !isMagic && !isAttack && haveStaff;
 
         if (isRoll && Vector3.Distance(transform.position, rollTargetPosition) > rollDistanceSmooth)
         {
@@ -193,6 +204,11 @@ public class PlayerController : MonoBehaviour
             myRigidbody.velocity = Vector3.zero;
 
             transform.position = Vector3.MoveTowards(transform.position, rollTargetPosition, rollDelta * Time.deltaTime);
+        }
+
+        if (isAttack)
+        {
+            myRigidbody.velocity = Vector3.zero;
         }
 
         //翻滚、跳跃和下落时，需要取消施法动作
@@ -205,7 +221,6 @@ public class PlayerController : MonoBehaviour
                 Destroy(missile.gameObject);
             }
         }
-        
     }
 
     public void PhysicCheck()
