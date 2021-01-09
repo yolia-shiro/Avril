@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //private Animator anim;
     private Rigidbody2D myRigidbody;
-    private Missile missile;
     private Animator anim;
     private Collider2D myCollider;
 
@@ -20,16 +18,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Jump")]
     public float jumpForce;
-
-    [Header("Magic Message")]
-    public GameObject missilePrefabs;
-    public Transform missilePos;
-
-    [Header("Staff Throw Message")]
-    public Transform myStaff;
-    public Transform newStaffParent;
-    private Transform oldStaffParent;
-    private Vector3 oldStaffLocalPosition;
 
     [Header("Roll Message")]
     public float rollDistance;
@@ -66,7 +54,6 @@ public class PlayerController : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         myCollider = GetComponent<Collider2D>();
-        oldStaffLocalPosition = myStaff.localPosition;
     }
 
     // Update is called once per frame
@@ -76,8 +63,6 @@ public class PlayerController : MonoBehaviour
         {
             isJump = false;
         }
-
-        haveStaff = myStaff.parent != newStaffParent;
 
         CheckInput();
         StateCheck();
@@ -92,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     public void Movement() 
     {
-        if (isRoll || isAttack) 
+        if (isRoll || isAttack || magicKind == 1) 
         {
             return;
         }
@@ -111,53 +96,6 @@ public class PlayerController : MonoBehaviour
     {
         if(isGround)
         {
-            if (canMagic && Input.GetButtonDown("Magic"))
-            {
-                isMagic = true;
-                magicKind = 0;
-                //产生飞弹
-                missile = Instantiate(missilePrefabs, missilePos.position, Quaternion.identity).GetComponent<Missile>();
-            }
-            else if (isMagic && Input.GetButtonUp("Magic"))
-            {
-                isMagic = false;
-                magicKind = -1;
-                //结束发射飞弹 
-                if (missile != null)
-                {
-                    missile.transform.rotation = transform.right.x < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
-                    missile.SwitchMissileState(Missile.missileState.Lauching);
-                    missile.CreateMuzzleEffect();
-                    //发射之后，将存储该飞弹的对象置空
-                    missile = null;
-                }
-            }
-            else if (isMagic && Input.GetButton("Magic"))
-            {
-                //飞弹跟随
-                if (missile != null)
-                {
-                    missile.FollowCreatingPos(missilePos);
-                }
-            }
-            if (Input.GetButtonDown("Staff Throw"))
-            {
-                if (haveStaff)
-                {
-                    //丢法杖
-                    anim.SetTrigger("throw");
-                }
-                else if(canMagic)
-                {
-                    //瞬移到法杖处
-                    transform.position = myStaff.position;
-                    myStaff.parent = oldStaffParent;
-                    myStaff.localPosition = oldStaffLocalPosition;
-                    myStaff.localRotation = Quaternion.identity;
-                    myStaff.GetComponent<StaffRotate>().enabled = false;
-                    haveStaff = true;
-                }
-            }
             if (canRoll && Input.GetButtonDown("Roll"))
             {
                 anim.SetTrigger("roll");
@@ -189,12 +127,12 @@ public class PlayerController : MonoBehaviour
         isRoll = anim.GetCurrentAnimatorStateInfo(2).IsName("Roll");
         isAttack = anim.GetCurrentAnimatorStateInfo(3).IsName("Physic Attack");
 
-        //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态; 不在攻击状态;
-        canJump = isGround && !isRoll && !isJump && !isAttack;
+        //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态; 不在攻击状态; 不在释放能打断魔法的状态
+        canJump = isGround && !isRoll && !isJump && !isAttack && magicKind <= 0;
         //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/ 不在攻击状态;
         canMagic = isGround && !isRoll && !isMagic && !isAttack; //&& haveStaff;
-        //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在攻击状态;
-        canRoll = isGround && !isJump && !isRoll && !isAttack;
+        //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在攻击状态; 不在释放能打断魔法的状态
+        canRoll = isGround && !isJump && !isRoll && !isAttack && magicKind <= 0;
         //攻击的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在释放魔法状态; 不在攻击状态; 有法杖
         canAttack = isGround && !isJump && !isRoll && !isMagic && !isAttack && haveStaff;
 
@@ -210,17 +148,6 @@ public class PlayerController : MonoBehaviour
         {
             myRigidbody.velocity = Vector3.zero;
         }
-
-        //翻滚、跳跃和下落时，需要取消施法动作
-        if (isRoll || isJump || myRigidbody.velocity.y < 0)
-        {
-            isMagic = false;
-            //销毁生成的missile
-            if (missile != null)
-            {
-                Destroy(missile.gameObject);
-            }
-        }
     }
 
     public void PhysicCheck()
@@ -228,16 +155,13 @@ public class PlayerController : MonoBehaviour
         isGround = Physics2D.OverlapCircle(checkPoint.position, checkRadius, groundLayer);
     }
 
-    //动画事件(丢法杖)
-    public void ThrowStaff()
+    public void MagicMoveEnd()
     {
-        oldStaffParent = myStaff.parent;
-        myStaff.parent = newStaffParent;
-        myStaff.GetComponent<StaffRotate>().enabled = true;
-        haveStaff = false;
+        isMagic = false;
+        magicKind = -1;
     }
 
-    //动画事件(翻滚)
+    //动画事件(翻滚) 
     //无敌帧生效
     public void RollInvincibleStart()
     {

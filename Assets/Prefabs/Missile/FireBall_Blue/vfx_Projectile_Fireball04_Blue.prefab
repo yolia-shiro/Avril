@@ -38421,10 +38421,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67244e56956e3e246924befa010bc725, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 23
   createSpeed: 2
-  existTime: 5
   maxScale: 2
+  speed: 23
+  existTime: 5
+  storageTime: 10
   accuracy: 100
   fireRate: 5
   muzzlePrefab: {fileID: 1168789365331922, guid: be1e1b69b5df41d4cac77f46e151b5b2,
@@ -38461,7 +38462,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714274598519724}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.4

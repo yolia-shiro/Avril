@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    public enum missileState { Creating, Lauching }
+    public enum missileState { Creating, Lauching, Storage }
 
-    //[Header("")]
-    public float speed;
+    [Header("Creating State")]
     public float createSpeed;
-    public float existTime;
     public float maxScale;
+    [Header("Lauching State")]
+    public float speed;    
+    public float existTime;
 
     [Tooltip("From 0% to 100%")]
     public float accuracy;
@@ -70,6 +71,9 @@ public class Missile : MonoBehaviour
             case missileState.Lauching:
                 Forward();
                 break;
+            case missileState.Storage:
+                //
+                break;
         }
     }
 
@@ -92,6 +96,7 @@ public class Missile : MonoBehaviour
     {
         transform.position = creatingPos.position;
     }
+
 
     //创建发射时的起始特效
     public void CreateMuzzleEffect()
