@@ -14,8 +14,8 @@ public class MagicSystem : MonoBehaviour
     [Header("Magic Storage Message")]
     public float storageTime;
     public List<Transform> storagePos = new List<Transform>();
-    private List<GameObject> missileStorge = new List<GameObject>();
-    private int selectedStorageMissileIndex = 0;
+    public List<GameObject> missileStorge = new List<GameObject>();
+    public int selectedStorageMissileIndex = 0;
     public float selectedScaleTime;
     
     [Header("Staff Throw Message")]
@@ -27,10 +27,18 @@ public class MagicSystem : MonoBehaviour
     private PlayerController playerController;
     private Animator anim;
     private Rigidbody2D myRigidbody;
-    private Missile missile;
+    public Missile missile;
+
+    //FSM
+    private PlayerMagicBasicState curMagicState;
+    public MagicDefaultState magicDefaultState = new MagicDefaultState();
+    public MagicMissileState magicMissileState = new MagicMissileState();
+    public MagicStorageState magicStorageState = new MagicStorageState();
 
     private void Start()
     {
+        TranslateToState(magicDefaultState);
+
         playerController = GetComponent<PlayerController>();
         anim = GetComponent<Animator>();
         myRigidbody = GetComponent<Rigidbody2D>();
@@ -60,6 +68,16 @@ public class MagicSystem : MonoBehaviour
             ThrowStaffAndMagicMoveInputCheck();
             StorageMissileOperatorInputCheck();
         }
+
+        curMagicState.OnUpdate(this, this.playerController);
+        Debug.Log(curMagicState);
+    }
+
+    //转换
+    public void TranslateToState(PlayerMagicBasicState playerMagicBasicState)
+    {
+        curMagicState = playerMagicBasicState;
+        curMagicState.OnEnter(this, this.playerController);
     }
 
     //魔法飞弹输入相关
@@ -67,50 +85,23 @@ public class MagicSystem : MonoBehaviour
     {
         if (playerController.canMagic && Input.GetButtonDown("Magic"))
         {
-            playerController.isMagic = true;
-            playerController.magicKind = 0;
-            //产生飞弹
-            missile = Instantiate(missilePrefabs, missilePos.position, Quaternion.identity).GetComponent<Missile>();
+            TranslateToState(magicMissileState);
+            
         }
-        else if (playerController.isMagic && Input.GetButtonUp("Magic"))
+    }
+    //发射魔法飞弹
+    public void MagicLaunch()
+    {
+        playerController.isMagic = false;
+        playerController.magicKind = -1;
+        //结束发射飞弹 
+        if (missile != null)
         {
-            playerController.isMagic = false;
-            playerController.magicKind = -1;
-            //结束发射飞弹 
-            if (missile != null)
-            {
-                missile.transform.rotation = transform.right.x < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
-                missile.SwitchMissileState(Missile.missileState.Lauching);
-                missile.CreateMuzzleEffect();
-                //发射之后，将存储该飞弹的对象置空
-                missile = null;
-            }
-        }
-        else if (playerController.isMagic && Input.GetButton("Magic"))
-        {
-            if (missile != null && Input.GetButtonDown("Magic Storage"))
-            {
-                missile.SwitchMissileState(Missile.missileState.Storage);
-                //放置到Magic Storage处
-                if (missileStorge.Count < storagePos.Count)
-                {
-                    missile.transform.parent = storagePos[missileStorge.Count];
-                    missile.transform.localPosition = Vector3.zero;
-                    missile.transform.localScale = Vector3.one;
-                    missileStorge.Add(missile.gameObject);
-                    StartCoroutine(DestoryStorageMissileAfterTime());
-
-                    missile = null;
-
-                    playerController.isMagic = false;
-                    playerController.magicKind = -1;
-                }
-            }
-            //飞弹跟随
-            if (missile != null)
-            {
-                missile.FollowCreatingPos(missilePos);
-            }
+            missile.transform.rotation = transform.right.x < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
+            missile.SwitchMissileState(Missile.missileState.Lauching);
+            missile.CreateMuzzleEffect();
+            //发射之后，将存储该飞弹的对象置空
+            missile = null;
         }
     }
 
@@ -119,38 +110,7 @@ public class MagicSystem : MonoBehaviour
     {
         if (Input.GetButtonDown("Select Storage Missile") && missileStorge.Count != 0)
         {
-            //时间变缓
-            Time.timeScale = selectedScaleTime;
-            //
-            selectedStorageMissileIndex = 0;
-        }
-        else if (Input.GetButton("Select Storage Missile"))
-        {
-            if (missileStorge.Count == 0)
-            {
-                Time.timeScale = 1.0f;
-                return;
-            }
-            if (selectedStorageMissileIndex >= missileStorge.Count)
-            {
-                selectedStorageMissileIndex = missileStorge.Count - 1;
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                selectedStorageMissileIndex--;
-                selectedStorageMissileIndex = selectedStorageMissileIndex < 0 ? 0 : selectedStorageMissileIndex;
-            } 
-            else if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                selectedStorageMissileIndex++;
-                selectedStorageMissileIndex = selectedStorageMissileIndex >= missileStorge.Count ? missileStorge.Count - 1 : selectedStorageMissileIndex;
-            }
-            //
-            Debug.Log(selectedStorageMissileIndex + " : " + missileStorge[selectedStorageMissileIndex].transform.parent.name);
-        }
-        else if (Input.GetButtonUp("Select Storage Missile"))
-        {
-            Time.timeScale = 1.0f;
+            TranslateToState(magicStorageState);
         }
     }
 
