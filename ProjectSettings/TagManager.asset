@@ -17,8 +17,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Tree
     uniqueID: 1459832325
+    locked: 0
+  - name: Enemy
+    uniqueID: 2059380853
     locked: 0
   - name: Missile
     uniqueID: 1503262063

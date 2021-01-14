@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Missile : MonoBehaviour
 {
-    public enum missileState { Creating, Lauching, Storage }
+    public enum missileState { Creating, Lauching, ToStorage, Storage }
 
     [Header("Creating State")]
     public float createSpeed;
@@ -12,6 +12,13 @@ public class Missile : MonoBehaviour
     [Header("Lauching State")]
     public float speed;    
     public float existTime;
+    [Header("To Storage State")]
+    public float disappearSpeed;
+    [Header("Storage State")]
+    public float radius;
+    public float storageSpeed;
+    public Vector3 storageBeginLocalPos;
+    public Vector3 randomDir;
 
     [Tooltip("From 0% to 100%")]
     public float accuracy;
@@ -71,8 +78,14 @@ public class Missile : MonoBehaviour
             case missileState.Lauching:
                 Forward();
                 break;
+            case missileState.ToStorage:
+                break;
             case missileState.Storage:
-                //
+                transform.localPosition = Vector3.Lerp(transform.localPosition, storageBeginLocalPos + randomDir, storageSpeed * Time.deltaTime);
+                if (Vector3.Magnitude(transform.localPosition - (storageBeginLocalPos + randomDir)) <= 0.01)
+                {
+                    randomDir = GetRandomPosInSphere();
+                }
                 break;
         }
     }
@@ -97,6 +110,14 @@ public class Missile : MonoBehaviour
         transform.position = creatingPos.position;
     }
 
+    //确定圆形范围的随机位置
+    public Vector3 GetRandomPosInSphere()
+    {
+        float angle = Random.Range(0, Mathf.PI);
+        float r = Random.Range(0, radius);
+        return new Vector3(r * Mathf.Cos(angle), r * Mathf.Sin(angle), 0);
+    }
+
 
     //创建发射时的起始特效
     public void CreateMuzzleEffect()
@@ -116,6 +137,15 @@ public class Missile : MonoBehaviour
         }
     }
 
+    public IEnumerator MissileToTargetScale(Vector3 targetScale)
+    {
+        while (this != null && Vector3.Magnitude(transform.localScale - targetScale) > 0.1)
+        {
+            transform.localScale = Vector3.Lerp(transform.localScale, targetScale, disappearSpeed * Time.deltaTime);
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
+
     public IEnumerator WaitForDestory() 
     {
         yield return new WaitForSeconds(existTime);
@@ -125,5 +155,8 @@ public class Missile : MonoBehaviour
         }
     }
 
-
+    public void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(this.transform.position, radius);
+    }
 }

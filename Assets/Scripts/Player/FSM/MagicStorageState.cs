@@ -17,16 +17,19 @@ public class MagicStorageState : PlayerMagicBasicState
         bool magicButton = Input.GetButton("Magic");
         bool magicStorageButton = Input.GetButton("Select Storage Missile");
 
-        if (!magicStorageButton || magicSystem.missileStorge.Count == 0)
+        if (!magicStorageButton || magicSystem.magicStorge.Count == 0)
         {
             Time.timeScale = 1.0f;
             //切换回默认状态
-            if (magicSystem.missile == null)
+            if (magicSystem.curMagic == null)
             {
                 magicSystem.TranslateToState(magicSystem.magicDefaultState);
             }
             else 
             {
+                //合并
+                magicSystem.StartCoroutine(magicSystem.MergeMagic());
+
                 magicSystem.TranslateToState(magicSystem.magicMissileState);
             }
             
@@ -38,27 +41,26 @@ public class MagicStorageState : PlayerMagicBasicState
             magicSystem.MagicLaunch();
         }
 
-        if (magicSystem.selectedStorageMissileIndex >= magicSystem.missileStorge.Count)
+        if (magicSystem.selectedStorageMagicIndex >= magicSystem.magicStorge.Count)
         {
-            magicSystem.selectedStorageMissileIndex = magicSystem.missileStorge.Count - 1;
+            magicSystem.selectedStorageMagicIndex = magicSystem.magicStorge.Count - 1;
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            magicSystem.selectedStorageMissileIndex--;
-            magicSystem.selectedStorageMissileIndex = magicSystem.selectedStorageMissileIndex < 0 ? 0 : magicSystem.selectedStorageMissileIndex;
+            magicSystem.selectedStorageMagicIndex--;
+            magicSystem.selectedStorageMagicIndex = magicSystem.selectedStorageMagicIndex < 0 ? 0 : magicSystem.selectedStorageMagicIndex;
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            magicSystem.selectedStorageMissileIndex++;
-            magicSystem.selectedStorageMissileIndex = magicSystem.selectedStorageMissileIndex >= magicSystem.missileStorge.Count ? 
-                                                        magicSystem.missileStorge.Count - 1 : magicSystem.selectedStorageMissileIndex;
+            magicSystem.selectedStorageMagicIndex++;
+            magicSystem.selectedStorageMagicIndex = magicSystem.selectedStorageMagicIndex >= magicSystem.magicStorge.Count ? 
+                                                        magicSystem.magicStorge.Count - 1 : magicSystem.selectedStorageMagicIndex;
         }
-        //
-        //Debug.Log(magicSystem.selectedStorageMissileIndex + " : " + magicSystem.missileStorge[magicSystem.selectedStorageMissileIndex].transform.parent.name);
+
         //飞弹跟随
-        if (magicSystem.missile != null)
+        if (magicSystem.curMagic != null)
         {
-            magicSystem.missile.FollowCreatingPos(magicSystem.missilePos);
+            magicSystem.curMagic.FollowCreatingPos(magicSystem.magicPos);
         }
     }
 }

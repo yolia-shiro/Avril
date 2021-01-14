@@ -4742,7 +4742,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
@@ -9509,7 +9509,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: -2
   m_RenderMode: 0
   m_SortMode: 0
@@ -14330,7 +14330,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_RenderMode: 4
   m_SortMode: 0
@@ -19221,7 +19221,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_RenderMode: 4
   m_SortMode: 0
@@ -23975,7 +23975,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_RenderMode: 4
   m_SortMode: 0
@@ -28742,7 +28742,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: -2
   m_RenderMode: 0
   m_SortMode: 0
@@ -28838,7 +28838,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 1
   m_RenderMode: 4
   m_SortMode: 0
@@ -38339,7 +38339,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
@@ -38373,10 +38373,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4561980649134078}
-  - component: {fileID: 1834791385274910208}
-  - component: {fileID: 54232288499262290}
-  - component: {fileID: 135122386436262632}
   - component: {fileID: 114135367868510966}
+  - component: {fileID: 1023840970}
+  - component: {fileID: 7458844147328729372}
+  - component: {fileID: 4703691536083844652}
   m_Layer: 0
   m_Name: vfx_Projectile_Fireball04_Blue
   m_TagString: Bullet
@@ -38392,7 +38392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1714274598519724}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.65, y: 2, z: -0.05}
+  m_LocalPosition: {x: 5.65, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4082883187384114}
@@ -38409,64 +38409,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1834791385274910208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714274598519724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67244e56956e3e246924befa010bc725, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  createSpeed: 2
-  maxScale: 2
-  speed: 23
-  existTime: 5
-  storageTime: 10
-  accuracy: 100
-  fireRate: 5
-  muzzlePrefab: {fileID: 1168789365331922, guid: be1e1b69b5df41d4cac77f46e151b5b2,
-    type: 3}
-  hitPrefab: {fileID: 1814361462553474, guid: cd0619af5899ce549b7d4ce0e319d426, type: 3}
-  trails:
-  - {fileID: 1471672613751028}
-  - {fileID: 1984927354528282}
-  - {fileID: 1595082524522576}
-  - {fileID: 1898954671562126}
-  - {fileID: 1008828697791282}
-  - {fileID: 1027614941741808}
---- !u!54 &54232288499262290
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714274598519724}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!135 &135122386436262632
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1714274598519724}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.4
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114135367868510966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38502,6 +38444,84 @@ MonoBehaviour:
   - {fileID: 1898954671562126}
   - {fileID: 1471672613751028}
   ActiveParticleSystems: 0101010101010101010101
+--- !u!114 &1023840970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714274598519724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58b2cf140437284f8dfb2c85a02b6a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createSpeed: 2
+  maxScale: 2
+  speed: 23
+  existTime: 5
+  disappearSpeed: 4
+  radius: 0.8
+  storageSpeed: 4.5
+  storageBeginLocalPos: {x: 0, y: 0, z: 0}
+  randomDir: {x: 0, y: 0, z: 0}
+  isNormal: 1
+  isDrag: 0
+  isTrack: 0
+  dragRadius: 5
+  dragForce: 1
+  dragEffectiveScale: 0
+  trackTarget: {fileID: 0}
+  trackOffset: 0
+  accuracy: 98
+  fireRate: 5
+  muzzlePrefab: {fileID: 1168789365331922, guid: be1e1b69b5df41d4cac77f46e151b5b2,
+    type: 3}
+  hitPrefab: {fileID: 1814361462553474, guid: cd0619af5899ce549b7d4ce0e319d426, type: 3}
+  trails:
+  - {fileID: 1471672613751028}
+  - {fileID: 1984927354528282}
+  - {fileID: 1595082524522576}
+  - {fileID: 1898954671562126}
+  - {fileID: 1008828697791282}
+  - {fileID: 1027614941741808}
+--- !u!58 &7458844147328729372
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714274598519724}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.4
+--- !u!50 &4703691536083844652
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714274598519724}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1898954671562126
 GameObject:
   m_ObjectHideFlags: 0
@@ -43231,7 +43251,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0
@@ -47998,7 +48018,7 @@ ParticleSystemRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1503262063
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 2
   m_RenderMode: 0
   m_SortMode: 0

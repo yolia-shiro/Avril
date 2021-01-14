@@ -1,12 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MagicSystem : MonoBehaviour
 {
-    [Header("Missile Message")]
-    public GameObject missilePrefabs;
-    public Transform missilePos;
+    [Header("Magic Message")]
+    public GameObject[] magicPrefabs;
+    public Transform magicPos;
+    public float magicLaunchCameraDuration;
+    public float magicLaunchCameraMigration;
 
     [Header("Magic Move Message")]
     public float yOffset; //y轴偏移 ----Avril重心在Bottom
@@ -14,9 +17,13 @@ public class MagicSystem : MonoBehaviour
     [Header("Magic Storage Message")]
     public float storageTime;
     public List<Transform> storagePos = new List<Transform>();
-    public List<GameObject> missileStorge = new List<GameObject>();
-    public int selectedStorageMissileIndex = 0;
+    public List<GameObject> magicStorge = new List<GameObject>();
+    public int storageIndex = -1;
+    public int selectedStorageMagicIndex = 0;
     public float selectedScaleTime;
+
+    [Header("Magic Mix")]
+    public float magicSpeed;
     
     [Header("Staff Throw Message")]
     public Transform myStaff;
@@ -27,7 +34,9 @@ public class MagicSystem : MonoBehaviour
     private PlayerController playerController;
     private Animator anim;
     private Rigidbody2D myRigidbody;
-    public Missile missile;
+    public Magic curMagic;
+
+    public int curMagicKind;
 
     //FSM
     private PlayerMagicBasicState curMagicState;
@@ -56,9 +65,9 @@ public class MagicSystem : MonoBehaviour
             playerController.isMagic = false;
             playerController.magicKind = -1;
             //销毁生成的missile
-            if (missile != null)
+            if (curMagic != null)
             {
-                Destroy(missile.gameObject);
+                Destroy(curMagic.gameObject);
             }
         }
 
@@ -80,6 +89,68 @@ public class MagicSystem : MonoBehaviour
         curMagicState.OnEnter(this, this.playerController);
     }
 
+    //合并魔法
+    public IEnumerator MergeMagic()
+    {
+        if (curMagic != null && magicStorge.Count > 0)
+        {
+            int mergeType = 0;
+            BitArray bitArray = new BitArray(3);
+
+            Magic m1 = curMagic;
+            Magic m2 = magicStorge[selectedStorageMagicIndex].GetComponent<Magic>();
+            if (m1 is AttackMagic && m2 is AttackMagic)
+            {
+                AttackMagic atm1 = m1 as AttackMagic;
+                AttackMagic atm2 = m2 as AttackMagic;
+                bitArray.Set(0, atm1.isNormal | atm2.isNormal);
+                bitArray.Set(1, atm1.isDrag | atm2.isDrag);
+                bitArray.Set(2, atm1.isTrack | atm2.isTrack);
+            }
+            else if (m1 is AssistMagic && m2 is AssistMagic)
+            {
+                AssistMagic asm1 = m1 as AssistMagic;
+                AssistMagic asm2 = m2 as AssistMagic;
+            }
+            for (int i = 2; i >= 0; i--)
+            {
+                mergeType = (mergeType << 1) + Convert.ToInt32(bitArray.Get(i));
+            }
+
+            if (mergeType > 0)
+            {
+                magicStorge.RemoveAt(selectedStorageMagicIndex);
+                storageIndex--;
+                for (int i = 0; i < magicStorge.Count; i++)
+                {
+                    magicStorge[i].transform.parent = storagePos[i];
+                    magicStorge[i].transform.localPosition = Vector3.zero;
+                    magicStorge[i].transform.localScale = Vector3.one;
+                }
+                m2.enabled = false;
+
+                Magic oldMagic = curMagic;
+                Magic mixMagic = Instantiate(magicPrefabs[mergeType], magicPos.position, Quaternion.identity).GetComponent<Magic>();
+                mixMagic.gameObject.SetActive(false);
+                curMagic = mixMagic;
+                while (curMagic != null && Vector3.Distance(oldMagic.transform.position, m2.transform.position) >= 0.1)
+                {
+                    oldMagic.transform.position = curMagic.transform.position;
+                    m2.transform.position = Vector3.Lerp(m2.transform.position, oldMagic.transform.position, magicSpeed * Time.deltaTime);
+                    yield return new WaitForSeconds(Time.deltaTime);
+                }
+
+                Destroy(oldMagic.gameObject);
+                Destroy(m2.gameObject);
+                //此处mixMagic和curMagic指向一个对象
+                //不使用curMagic的原因是在释放魔法的时候，会将curMagic置null，导致出现异常。
+                mixMagic.gameObject.SetActive(true);
+
+                selectedStorageMagicIndex = 0;
+            }
+        }
+    }
+
     //魔法飞弹输入相关
     public void MagicMissileInputCheck()
     {
@@ -95,20 +166,23 @@ public class MagicSystem : MonoBehaviour
         playerController.isMagic = false;
         playerController.magicKind = -1;
         //结束发射飞弹 
-        if (missile != null)
+        if (curMagic != null)
         {
-            missile.transform.rotation = transform.right.x < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
-            missile.SwitchMissileState(Missile.missileState.Lauching);
-            missile.CreateMuzzleEffect();
+            //设置curMagic的gameObject的原因：在魔法混合未结束的时候，curMagic.gameObject为false
+            curMagic.gameObject.SetActive(true);
+            curMagic.GetComponent<Collider2D>().enabled = true;
+            curMagic.transform.rotation = transform.right.x < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
+            curMagic.SwitchMissileState(Magic.MagicState.Effective);
+            //curMagic.CreateMuzzleEffect();
             //发射之后，将存储该飞弹的对象置空
-            missile = null;
+            curMagic = null;
         }
     }
 
     //储存魔法的操作输入检测
     public void StorageMissileOperatorInputCheck()
     {
-        if (Input.GetButtonDown("Select Storage Missile") && missileStorge.Count != 0)
+        if (Input.GetButtonDown("Select Storage Missile") && magicStorge.Count != 0)
         {
             TranslateToState(magicStorageState);
         }
@@ -155,15 +229,20 @@ public class MagicSystem : MonoBehaviour
     public IEnumerator DestoryStorageMissileAfterTime()
     {
         yield return new WaitForSeconds(storageTime);
-        if (missileStorge.Count != 0) 
+        if (magicStorge.Count != 0) 
         {
-            Destroy(missileStorge[0]);
-            missileStorge.RemoveAt(0);
-            for (int i = 0; i < missileStorge.Count; i++) 
+            Magic tempMagic = magicStorge[0].GetComponent<Magic>();
+            magicStorge.RemoveAt(0);
+            storageIndex--;
+
+            yield return StartCoroutine(tempMagic.MissileToTargetScale(Vector3.zero));
+            Destroy(tempMagic.gameObject);
+            
+            for (int i = 0; i < magicStorge.Count; i++) 
             {
-                missileStorge[i].transform.parent = storagePos[i];
-                missileStorge[i].transform.localPosition = Vector3.zero;
-                missileStorge[i].transform.localScale = Vector3.one;
+                magicStorge[i].transform.parent = storagePos[i];
+                magicStorge[i].transform.localPosition = Vector3.zero;
+                magicStorge[i].transform.localScale = Vector3.one;
             }
         }
     }
