@@ -5,8 +5,16 @@ using UnityEngine;
 
 public class MagicSystem : MonoBehaviour
 {
+    public enum MagicKind 
+    {
+        NormalMagic  = 1,
+        DragMagic = 2,
+        TrackMagic = 4,
+    }
+
     [Header("Magic Message")]
-    public GameObject[] magicPrefabs;
+    public GameObject[] attackMagicPrefabs;
+    public GameObject[] assistMagicPrefabs;
     public Transform magicPos;
     public float magicLaunchCameraDuration;
     public float magicLaunchCameraMigration;
@@ -35,13 +43,16 @@ public class MagicSystem : MonoBehaviour
     private Animator anim;
     private Rigidbody2D myRigidbody;
     public Magic curMagic;
-
-    public int curMagicKind;
-
+    
+    //攻击魔法的种类
+    public int curAttackMagicKind;
+    //辅助魔法的种类
+    public int curAssistMagicKind;
     //FSM
     private PlayerMagicBasicState curMagicState;
     public MagicDefaultState magicDefaultState = new MagicDefaultState();
     public MagicMissileState magicMissileState = new MagicMissileState();
+    public MagicAssistState magicAssistState = new MagicAssistState();
     public MagicStorageState magicStorageState = new MagicStorageState();
 
     private void Start()
@@ -53,14 +64,22 @@ public class MagicSystem : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
 
         oldStaffLocalPosition = myStaff.localPosition;
+
+        curAttackMagicKind = (int)MagicKind.NormalMagic;
     }
 
     private void Update()
     {
         playerController.haveStaff = myStaff.parent != newStaffParent;
 
+        if (Input.GetKeyDown(KeyCode.LeftAlt))
+        {
+            curAttackMagicKind = (curAttackMagicKind << 1) % (attackMagicPrefabs.Length - 1);
+        }
+
+
         //翻滚、跳跃和下落时，需要取消施法动作
-        if (playerController.isRoll || playerController.isJump || myRigidbody.velocity.y < 0)
+        if (playerController.isRoll || playerController.isJump || myRigidbody.velocity.y < -0.1)
         {
             playerController.isMagic = false;
             playerController.magicKind = -1;
@@ -73,7 +92,7 @@ public class MagicSystem : MonoBehaviour
 
         if (playerController.isGround)
         {
-            MagicMissileInputCheck();
+            MagicInputCheck();
             ThrowStaffAndMagicMoveInputCheck();
             StorageMissileOperatorInputCheck();
         }
@@ -87,6 +106,27 @@ public class MagicSystem : MonoBehaviour
     {
         curMagicState = playerMagicBasicState;
         curMagicState.OnEnter(this, this.playerController);
+    }
+
+    public IEnumerator MissileToStoragePos(Magic toStorageMagic)
+    {
+        //提前设置父物体，以防连续存储时，发生储存位置重叠的问题
+        storageIndex++;
+        toStorageMagic.transform.parent = storagePos[storageIndex];
+        //消散
+        yield return StartCoroutine(toStorageMagic.MissileToTargetScale(Vector3.zero));
+        //放置到Magic Storage处
+        toStorageMagic.SwitchMissileState(Magic.MagicState.Storage);
+        toStorageMagic.transform.localPosition = Vector3.zero;
+        toStorageMagic.storageBeginLocalPos = toStorageMagic.transform.localPosition;
+        toStorageMagic.randomDir = toStorageMagic.GetRandomPosInSphere();
+        //还原到储存大小
+        yield return toStorageMagic.StartCoroutine(toStorageMagic.MissileToTargetScale(Vector3.one));
+        //进行数据存储
+        //防止出现未存储完毕的魔法被用去混合
+        magicStorge.Add(toStorageMagic.gameObject);
+
+        StartCoroutine(DestoryStorageMissileAfterTime());
     }
 
     //合并魔法
@@ -130,7 +170,7 @@ public class MagicSystem : MonoBehaviour
                 m2.enabled = false;
 
                 Magic oldMagic = curMagic;
-                Magic mixMagic = Instantiate(magicPrefabs[mergeType], magicPos.position, Quaternion.identity).GetComponent<Magic>();
+                Magic mixMagic = Instantiate(attackMagicPrefabs[mergeType], magicPos.position, Quaternion.identity).GetComponent<Magic>();
                 mixMagic.gameObject.SetActive(false);
                 curMagic = mixMagic;
                 while (curMagic != null && Vector3.Distance(oldMagic.transform.position, m2.transform.position) >= 0.1)
@@ -152,11 +192,18 @@ public class MagicSystem : MonoBehaviour
     }
 
     //魔法飞弹输入相关
-    public void MagicMissileInputCheck()
+    public void MagicInputCheck()
     {
-        if (playerController.canMagic && Input.GetButtonDown("Magic"))
+        if (playerController.canMagic)
         {
-            TranslateToState(magicMissileState);
+            if (Input.GetButtonDown("Magic"))
+            {
+                TranslateToState(magicMissileState);
+            } 
+            else if (Input.GetKeyDown(KeyCode.V))
+            {
+                TranslateToState(magicAssistState);
+            }
             
         }
     }

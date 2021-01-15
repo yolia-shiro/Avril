@@ -26,7 +26,7 @@ public class TimedObjectDestructor : MonoBehaviour
 
     private void DestroyNow()
     {
-        DestroyObject(gameObject);
+        
     }
 }
 

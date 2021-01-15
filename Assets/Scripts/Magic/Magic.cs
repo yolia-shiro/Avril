@@ -22,7 +22,7 @@ public class Magic : MonoBehaviour
     public Vector3 storageBeginLocalPos;
     public Vector3 randomDir;
 
-    protected MagicState state;
+    private MagicState state;
     protected Vector3 targetScale;
 
     public virtual void Awake()

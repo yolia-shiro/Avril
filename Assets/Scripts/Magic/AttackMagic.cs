@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class AttackMagic : Magic
 {
-    //public enum missileState { Creating, Effective, ToStorage, Storage }
-    
+    [Header("Numerical Information")]
+    public float damage;
+    public float damageForce;
+
     [Header("Attack Magic Type")]
     public bool isNormal;
     public bool isDrag;
@@ -78,14 +80,14 @@ public class AttackMagic : Magic
             if (isNormal || isTrack)
             {
                 //造成伤害
-                Debug.Log("Hit ++++ Damage");
+                Debug.Log("Hit ++++ Damage : " + damage.ToString());
                 if (!isDrag)
                 {
-                    //不包含牵引效果的魔法将销毁
-                    Destroy(this.gameObject);
+                    collision.GetComponent<Rigidbody2D>().AddForce(transform.right * damageForce, ForceMode2D.Impulse);
+                    //产生碰撞效果
+                    CreateHitEffect(transform.position, Quaternion.identity);
                 }
             }
-
         }
     }
 
@@ -218,6 +220,53 @@ public class AttackMagic : Magic
             }
         }
         muzzleCreated = true;
+    }
+
+    //创建碰撞之后的特效
+    public void CreateHitEffect(Vector3 pos, Quaternion rot)
+    {
+        if (hitPrefab != null)
+        {
+            var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
+
+            var ps = hitVFX.GetComponent<ParticleSystem>();
+            if (ps == null)
+            {
+                var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                Destroy(hitVFX, psChild.main.duration);
+            }
+            else
+                Destroy(hitVFX, ps.main.duration);
+        }
+        StartCoroutine(DestroyParticle(0.0f));
+    }
+
+    //消除粒子效果
+    public IEnumerator DestroyParticle(float waitTime)
+    {
+
+        if (transform.childCount > 0 && waitTime != 0)
+        {
+            List<Transform> tList = new List<Transform>();
+
+            foreach (Transform t in transform.GetChild(0).transform)
+            {
+                tList.Add(t);
+            }
+
+            while (transform.GetChild(0).localScale.x > 0)
+            {
+                yield return new WaitForSeconds(0.01f);
+                transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                for (int i = 0; i < tList.Count; i++)
+                {
+                    tList[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(waitTime);
+        Destroy(gameObject);
     }
 
     //攻击通用
