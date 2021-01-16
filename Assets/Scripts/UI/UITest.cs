@@ -12,6 +12,7 @@ public class UITest : MonoBehaviour
     void Update()
     {
         showText.text = text;
+        
     }
 
     public static void SetText(string t)

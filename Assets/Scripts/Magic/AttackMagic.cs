@@ -8,6 +8,10 @@ public class AttackMagic : Magic
     public float damage;
     public float damageForce;
 
+    [Header("Effective State")]
+    public float speed;
+    public float existTime;
+
     [Header("Attack Magic Type")]
     public bool isNormal;
     public bool isDrag;
@@ -29,7 +33,7 @@ public class AttackMagic : Magic
     public float fireRate;
 
     public GameObject muzzlePrefab;
-    public GameObject hitPrefab;
+    //public GameObject hitPrefab;
     public List<GameObject> trails;
     private bool muzzleCreated = false;
 
@@ -202,7 +206,7 @@ public class AttackMagic : Magic
         transform.right = Vector3.MoveTowards(transform.right, direction, trackOffset * Time.deltaTime);
     }
 
-    //创建发射时的起始特效
+    //创建起始特效
     public void CreateMuzzleEffect()
     {
         if (muzzleCreated) return;
@@ -222,52 +226,52 @@ public class AttackMagic : Magic
         muzzleCreated = true;
     }
 
-    //创建碰撞之后的特效
-    public void CreateHitEffect(Vector3 pos, Quaternion rot)
-    {
-        if (hitPrefab != null)
-        {
-            var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
+    ////创建结束的特效
+    //public void CreateHitEffect(Vector3 pos, Quaternion rot)
+    //{
+    //    if (hitPrefab != null)
+    //    {
+    //        var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
 
-            var ps = hitVFX.GetComponent<ParticleSystem>();
-            if (ps == null)
-            {
-                var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-                Destroy(hitVFX, psChild.main.duration);
-            }
-            else
-                Destroy(hitVFX, ps.main.duration);
-        }
-        StartCoroutine(DestroyParticle(0.0f));
-    }
+    //        var ps = hitVFX.GetComponent<ParticleSystem>();
+    //        if (ps == null)
+    //        {
+    //            var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+    //            Destroy(hitVFX, psChild.main.duration);
+    //        }
+    //        else
+    //            Destroy(hitVFX, ps.main.duration);
+    //    }
+    //    StartCoroutine(DestroyParticle(0.0f));
+    //}
 
-    //消除粒子效果
-    public IEnumerator DestroyParticle(float waitTime)
-    {
+    ////消除粒子效果
+    //public IEnumerator DestroyParticle(float waitTime)
+    //{
 
-        if (transform.childCount > 0 && waitTime != 0)
-        {
-            List<Transform> tList = new List<Transform>();
+    //    if (transform.childCount > 0 && waitTime != 0)
+    //    {
+    //        List<Transform> tList = new List<Transform>();
 
-            foreach (Transform t in transform.GetChild(0).transform)
-            {
-                tList.Add(t);
-            }
+    //        foreach (Transform t in transform.GetChild(0).transform)
+    //        {
+    //            tList.Add(t);
+    //        }
 
-            while (transform.GetChild(0).localScale.x > 0)
-            {
-                yield return new WaitForSeconds(0.01f);
-                transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-                for (int i = 0; i < tList.Count; i++)
-                {
-                    tList[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-                }
-            }
-        }
+    //        while (transform.GetChild(0).localScale.x > 0)
+    //        {
+    //            yield return new WaitForSeconds(0.01f);
+    //            transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+    //            for (int i = 0; i < tList.Count; i++)
+    //            {
+    //                tList[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+    //            }
+    //        }
+    //    }
 
-        yield return new WaitForSeconds(waitTime);
-        Destroy(gameObject);
-    }
+    //    yield return new WaitForSeconds(waitTime);
+    //    Destroy(gameObject);
+    //}
 
     //攻击通用
     //发射之后自动销毁

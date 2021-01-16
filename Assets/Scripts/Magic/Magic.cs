@@ -10,9 +10,7 @@ public class Magic : MonoBehaviour
     [Header("Creating State")]
     public float createSpeed;
     public float maxScale;
-    [Header("Effective State")]
-    public float speed;
-    public float existTime;
+
 
     [Header("To Storage State")]
     public float disappearSpeed;
@@ -22,6 +20,7 @@ public class Magic : MonoBehaviour
     public Vector3 storageBeginLocalPos;
     public Vector3 randomDir;
 
+    public GameObject hitPrefab;
     private MagicState state;
     protected Vector3 targetScale;
 
@@ -58,7 +57,7 @@ public class Magic : MonoBehaviour
     //创造状态下执行的动作
     public virtual void Creating()
     {
-        transform.localScale = Vector3.Lerp(transform.localScale, targetScale, createSpeed * Time.deltaTime);
+        transform.localScale = Vector3.MoveTowards(transform.localScale, targetScale, createSpeed * Time.deltaTime);
     }
     //生效状态下执行的动作
     public virtual void Effective()
@@ -103,6 +102,52 @@ public class Magic : MonoBehaviour
         }
     }
 
+    //创建结束的特效
+    public void CreateHitEffect(Vector3 pos, Quaternion rot)
+    {
+        if (hitPrefab != null)
+        {
+            var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
+
+            var ps = hitVFX.GetComponent<ParticleSystem>();
+            if (ps == null)
+            {
+                var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                Destroy(hitVFX, psChild.main.duration);
+            }
+            else
+                Destroy(hitVFX, ps.main.duration);
+        }
+        StartCoroutine(DestroyParticle(0.0f));
+    }
+
+    //消除粒子效果
+    public IEnumerator DestroyParticle(float waitTime)
+    {
+
+        if (transform.childCount > 0 && waitTime != 0)
+        {
+            List<Transform> tList = new List<Transform>();
+
+            foreach (Transform t in transform.GetChild(0).transform)
+            {
+                tList.Add(t);
+            }
+
+            while (transform.GetChild(0).localScale.x > 0)
+            {
+                yield return new WaitForSeconds(0.01f);
+                transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                for (int i = 0; i < tList.Count; i++)
+                {
+                    tList[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
+                }
+            }
+        }
+
+        yield return new WaitForSeconds(waitTime);
+        Destroy(gameObject);
+    }
     //确定圆形范围的随机位置
     //用于储存状态下的自动位置偏移
     public Vector3 GetRandomPosInSphere()

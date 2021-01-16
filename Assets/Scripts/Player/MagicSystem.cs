@@ -16,6 +16,8 @@ public class MagicSystem : MonoBehaviour
     public GameObject[] attackMagicPrefabs;
     public GameObject[] assistMagicPrefabs;
     public Transform magicPos;
+    public Transform healPos;
+    public Transform defensePos;
     public float magicLaunchCameraDuration;
     public float magicLaunchCameraMigration;
 
@@ -110,6 +112,8 @@ public class MagicSystem : MonoBehaviour
 
     public IEnumerator MissileToStoragePos(Magic toStorageMagic)
     {
+        Vector3 storageScale = toStorageMagic.transform.localScale / toStorageMagic.maxScale;
+
         //提前设置父物体，以防连续存储时，发生储存位置重叠的问题
         storageIndex++;
         toStorageMagic.transform.parent = storagePos[storageIndex];
@@ -121,7 +125,7 @@ public class MagicSystem : MonoBehaviour
         toStorageMagic.storageBeginLocalPos = toStorageMagic.transform.localPosition;
         toStorageMagic.randomDir = toStorageMagic.GetRandomPosInSphere();
         //还原到储存大小
-        yield return toStorageMagic.StartCoroutine(toStorageMagic.MissileToTargetScale(Vector3.one));
+        yield return toStorageMagic.StartCoroutine(toStorageMagic.MissileToTargetScale(storageScale));
         //进行数据存储
         //防止出现未存储完毕的魔法被用去混合
         magicStorge.Add(toStorageMagic.gameObject);
@@ -202,6 +206,8 @@ public class MagicSystem : MonoBehaviour
             } 
             else if (Input.GetKeyDown(KeyCode.V))
             {
+                //取消刚体速度
+                myRigidbody.velocity = Vector3.zero;
                 TranslateToState(magicAssistState);
             }
             

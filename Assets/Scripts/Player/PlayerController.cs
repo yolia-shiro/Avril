@@ -77,7 +77,7 @@ public class PlayerController : MonoBehaviour
 
     public void Movement() 
     {
-        if (isRoll || isAttack || magicKind == 1) 
+        if (isRoll || isAttack || magicKind >= 1) 
         {
             return;
         }
