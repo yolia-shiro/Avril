@@ -7,8 +7,9 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D myRigidbody;
     private Animator anim;
     private Collider2D myCollider;
+    private PlayerData playerData;
 
-    public float xAxis;
+    [HideInInspector] public float xAxis;
 
     [Header("Walk")]
     public float walkSpeed;
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     public float rollDistance;
     public float rollDistanceSmooth;
     public float rollDelta;
-    public Vector3 rollTargetPosition;
+    [HideInInspector] public Vector3 rollTargetPosition;
 
     [Header("Ground Check")]
     public Transform checkPoint;
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
     public bool isMagic;
 
     public bool haveStaff;
+    public bool canThrow;
+    public bool isAim;
     public int magicKind;
 
     public bool canRoll;
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
         myRigidbody = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         myCollider = GetComponent<Collider2D>();
+        playerData = GetComponent<PlayerData>();
     }
 
     // Update is called once per frame
@@ -77,8 +81,9 @@ public class PlayerController : MonoBehaviour
 
     public void Movement() 
     {
-        if (isRoll || isAttack || magicKind >= 1) 
+        if (isRoll || isAttack || magicKind >= 1 || isAim) 
         {
+            xAxis = 0;
             return;
         }
         xAxis = Input.GetAxis("Horizontal");
@@ -92,6 +97,7 @@ public class PlayerController : MonoBehaviour
         myRigidbody.velocity = new Vector2(speed * xAxis, myRigidbody.velocity.y);
     }
 
+    //检查翻滚和物理攻击的输入
     public void CheckInput() 
     {
         if(isGround)
@@ -122,19 +128,21 @@ public class PlayerController : MonoBehaviour
 
     //状态检查
     //对当前状态进行行为处理
-    public void StateCheck()
+    private void StateCheck()
     {
         isRoll = anim.GetCurrentAnimatorStateInfo(2).IsName("Roll");
         isAttack = anim.GetCurrentAnimatorStateInfo(3).IsName("Physic Attack");
 
         //跳跃的条件：在地面上; 不在翻滚状态; 不在跳跃状态; 不在攻击状态; 不在释放能打断魔法的状态
         canJump = isGround && !isRoll && !isJump && !isAttack && magicKind <= 0;
-        //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/ 不在攻击状态;
-        canMagic = isGround && !isRoll && !isMagic && !isAttack; //&& haveStaff;
+        //释放魔法的条件：在地面上; 不在翻滚状态; 不在释放魔法状态; /*有法杖(待定)*/ 不在攻击状态; 不在瞄准状态;
+        canMagic = isGround && !isRoll && !isMagic && !isAttack && !isAim; //&& haveStaff;
         //翻滚的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在攻击状态; 不在释放能打断魔法的状态
         canRoll = isGround && !isJump && !isRoll && !isAttack && magicKind <= 0;
         //攻击的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在释放魔法状态; 不在攻击状态; 有法杖
         canAttack = isGround && !isJump && !isRoll && !isMagic && !isAttack && haveStaff;
+        //投掷法杖的条件：在地面上; 不在跳跃状态; 不在翻滚状态; 不在释放魔法状态; 不在攻击状态; 有法杖
+        canThrow = isGround && !isJump && !isRoll && !isMagic && !isAttack && haveStaff;
 
         if (isRoll && Vector3.Distance(transform.position, rollTargetPosition) > rollDistanceSmooth)
         {
@@ -150,11 +158,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PhysicCheck()
+    private void PhysicCheck()
     {
         isGround = Physics2D.OverlapCircle(checkPoint.position, checkRadius, groundLayer);
     }
 
+    //动画事件
+    //瞬移至法杖结束
     public void MagicMoveEnd()
     {
         isMagic = false;

@@ -9,8 +9,9 @@ public class AttackMagic : Magic
     public float damageForce;
 
     [Header("Effective State")]
+    //攻击魔法生效状态表现为向前(目标)移动
     public float speed;
-    public float existTime;
+    public float existTime;     //未命中目标时的存在时长
 
     [Header("Attack Magic Type")]
     public bool isNormal;
@@ -20,29 +21,42 @@ public class AttackMagic : Magic
     [Header("Drag Message")]
     public float dragRadius;
     public float dragForce;
-    public float dragEffectiveScale;
+    public float dragEffectiveScale;    //牵引魔法生效时的特效半径
     private bool isDragEffective = false;
 
     [Header("Track Message")]
     public Transform trackTarget;
     private bool haveFindTrackTarget = false;
-    public float trackOffset;
+    public float trackOffset;       //trackDelta, MoveTowards用
 
-    [Tooltip("From 0% to 100%")]
+    [Header("Spell Burst")]
+    //魔力爆发
+    public float burstRadius;
+    public float burstDamage;
+    public float burstForce;
+    public GameObject MagicBurstEffect;
+
+    [Header("Weapon Attach")]
+    //魔力附着
+    [Range(0, 1)] public float attachValuePerMagic; //每次附加值
+    [HideInInspector] public float curAttachValue; //当前武器魔法附着值
+    public float attachLossRate; //魔力附着流逝速度
+    
+    [Header("Launch Offset")]       //发射偏移
+    [Tooltip("From 0% to 100%")]    
     public float accuracy;
     public float fireRate;
+    private Vector3 offset;
 
+    [Header("Effect Prefabs")]
     public GameObject muzzlePrefab;
-    //public GameObject hitPrefab;
     public List<GameObject> trails;
     private bool muzzleCreated = false;
-
-    private Vector3 offset;
 
     public override void Start()
     {
         base.Start();
-        //used to create a radius for the accuracy and have a very unique randomness
+        //产生发射偏移
         if (accuracy != 100)
         {
             accuracy = 1 - (accuracy / 100);
@@ -66,13 +80,13 @@ public class AttackMagic : Magic
         }
     }
 
-    public override void Update()
-    {
-        base.Update();
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (state == MagicState.Attachment)
+        {
+            //附着状态不执行碰撞器函数的内容
+            return;
+        }
         if (collision.CompareTag("Enemy"))
         {
             if (isDrag && !isDragEffective)
@@ -125,6 +139,18 @@ public class AttackMagic : Magic
         }
     }
 
+    //附着状态下逐渐消耗附着值
+    public override void Attachment()
+    {
+        curAttachValue -= attachLossRate * Time.deltaTime;
+        if (curAttachValue <= 0) 
+        {
+            curAttachValue = 0;
+            //魔力附着结束，移除当前脚本
+            Destroy(this);
+        }
+    }
+
     //设置状态
     public void SetAttackMagicType(int type)
     {
@@ -146,6 +172,7 @@ public class AttackMagic : Magic
     {
         if (isDragEffective)
         {
+            //牵引生效时，不向前移动
             return;
         }
         transform.position = transform.position + (transform.right + offset) * speed * Time.deltaTime;
@@ -206,6 +233,62 @@ public class AttackMagic : Magic
         transform.right = Vector3.MoveTowards(transform.right, direction, trackOffset * Time.deltaTime);
     }
 
+    //武器附魔相关属性赋值
+    public void SetWeaponAttachAttr(AttackMagic attackMagic)
+    {
+        attachLossRate = attackMagic.attachLossRate;
+    }
+
+    //魔力爆发相关属性赋值
+    public void SetMagicBurstAttr(AttackMagic attackMagic)
+    {
+        //
+        isNormal = attackMagic.isNormal;
+        isDrag = attackMagic.isDrag;
+        isTrack = attackMagic.isTrack;
+        //
+        burstRadius = attackMagic.burstRadius;
+        burstDamage = attackMagic.burstDamage;
+        burstForce = attackMagic.burstForce;
+        MagicBurstEffect = attackMagic.MagicBurstEffect;
+    }
+
+    //魔力爆发
+    public void MagicBurst()
+    {
+        CreateBurstEffect();
+        Debug.Log("处于魔力爆发范围内的可攻击目标");
+        foreach (var collider in Physics2D.OverlapCircleAll(transform.position, burstRadius))
+        {
+            if (collider.CompareTag("Enemy"))
+            {
+                Debug.Log("Hit Obejct : " + collider.gameObject.name + ", Damage : " + burstDamage * curAttachValue + ", Force : " + burstForce);
+                Vector3 forceDir = collider.transform.position - transform.position;
+                collider.GetComponent<Rigidbody2D>().AddForce(forceDir * burstForce, ForceMode2D.Impulse);
+            }
+        }
+        //魔力爆发结束后销毁当前脚本
+        Destroy(this);
+    }
+
+    //创建魔力爆发特效
+    public void CreateBurstEffect() 
+    {
+        if (MagicBurstEffect != null)
+        {
+            var VFX = Instantiate(MagicBurstEffect, transform.position, Quaternion.identity) as GameObject;
+
+            var ps = VFX.GetComponent<ParticleSystem>();
+            if (ps == null)
+            {
+                var psChild = VFX.transform.GetChild(0).GetComponent<ParticleSystem>();
+                Destroy(VFX, psChild.main.duration);
+            }
+            else
+                Destroy(VFX, ps.main.duration);
+        }
+    }
+
     //创建起始特效
     public void CreateMuzzleEffect()
     {
@@ -226,53 +309,6 @@ public class AttackMagic : Magic
         muzzleCreated = true;
     }
 
-    ////创建结束的特效
-    //public void CreateHitEffect(Vector3 pos, Quaternion rot)
-    //{
-    //    if (hitPrefab != null)
-    //    {
-    //        var hitVFX = Instantiate(hitPrefab, pos, rot) as GameObject;
-
-    //        var ps = hitVFX.GetComponent<ParticleSystem>();
-    //        if (ps == null)
-    //        {
-    //            var psChild = hitVFX.transform.GetChild(0).GetComponent<ParticleSystem>();
-    //            Destroy(hitVFX, psChild.main.duration);
-    //        }
-    //        else
-    //            Destroy(hitVFX, ps.main.duration);
-    //    }
-    //    StartCoroutine(DestroyParticle(0.0f));
-    //}
-
-    ////消除粒子效果
-    //public IEnumerator DestroyParticle(float waitTime)
-    //{
-
-    //    if (transform.childCount > 0 && waitTime != 0)
-    //    {
-    //        List<Transform> tList = new List<Transform>();
-
-    //        foreach (Transform t in transform.GetChild(0).transform)
-    //        {
-    //            tList.Add(t);
-    //        }
-
-    //        while (transform.GetChild(0).localScale.x > 0)
-    //        {
-    //            yield return new WaitForSeconds(0.01f);
-    //            transform.GetChild(0).localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-    //            for (int i = 0; i < tList.Count; i++)
-    //            {
-    //                tList[i].localScale -= new Vector3(0.1f, 0.1f, 0.1f);
-    //            }
-    //        }
-    //    }
-
-    //    yield return new WaitForSeconds(waitTime);
-    //    Destroy(gameObject);
-    //}
-
     //攻击通用
     //发射之后自动销毁
     public IEnumerator WaitForDestory()
@@ -285,10 +321,27 @@ public class AttackMagic : Magic
     }
 
 
+    public int GetMagicType() 
+    {
+        int magicType = 0;
+        BitArray bitArray = new BitArray(3);
+        bitArray.Set(0, isNormal);
+        bitArray.Set(1, isDrag);
+        bitArray.Set(2, isTrack);
+
+        for (int i = 2; i >= 0; i--)
+        {
+            magicType = (magicType << 1) + System.Convert.ToInt32(bitArray.Get(i));
+        }
+        return magicType;
+    }
+
     //Scene辅助函数
     public void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(this.transform.position, radius);
         Gizmos.DrawWireSphere(this.transform.position, dragRadius);
+        //魔力爆发范围
+        Gizmos.DrawWireSphere(this.transform.position, burstRadius);
     }
 }

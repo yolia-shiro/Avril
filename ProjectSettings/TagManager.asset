@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Bullet
   - Enemy
+  - Enemy Attack
   layers:
   - Default
   - TransparentFX
@@ -52,6 +53,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 2059380853
+    locked: 0
+  - name: Enemy Effect
+    uniqueID: 2513087569
     locked: 0
   - name: Missile
     uniqueID: 1503262063

@@ -1,0 +1,611 @@
+fileFormatVersion: 2
+guid: e1ca28f5ae726a54db0aab5769fa18b1
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: b2a9591990af98743ba3ff7cf1000886, type: 3}
+  textureImporterSettings:
+    alphaSource: 1
+    mipMapMode: 0
+    enableMipMap: 1
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+    convertToNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    isReadable: 0
+    streamingMipmaps: 1
+    streamingMipmapsPriority: 0
+    nPOTScale: 1
+    sRGBTexture: 1
+    spriteMode: 2
+    spriteExtrude: 1
+    spriteMeshType: 1
+    alignment: 0
+    spritePivot: {x: 0.5, y: 0.5}
+    spritePixelsToUnits: 100
+    spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+    spriteGenerateFallbackPhysicsShape: 0
+    generateCubemap: 6
+    cubemapConvolution: 0
+    seamlessCubemap: 0
+    alphaIsTransparency: 1
+    spriteTessellationDetail: -1
+    textureType: 8
+    textureShape: 1
+    singleChannelComponent: 0
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+    normalMap: 0
+    textureFormat: 0
+    maxTextureSize: 0
+    lightmap: 0
+    compressionQuality: 0
+    linearTexture: 0
+    grayScaleToAlpha: 0
+    rGBM: 0
+    cubemapConvolutionSteps: 0
+    cubemapConvolutionExponent: 0
+    maxTextureSizeSet: 0
+    compressionQualitySet: 0
+    textureFormatSet: 0
+    applyGammaDecoding: 0
+  spriteImportData:
+  - name: 
+    originalName: 
+    pivot: {x: 0, y: 0}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 0
+      y: 0
+      width: 0
+      height: 0
+    spriteID: 
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 0, y: 0}
+  mosaicSpriteImportData: []
+  rigSpriteImportData:
+  - name: Cloak Front
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 4
+      width: 204
+      height: 359
+    spriteID: acc726c5dd59565478def894e854c7f5
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -119, y: -49}
+  - name: 15 SideHair
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 433
+      y: 258
+      width: 29
+      height: 148
+    spriteID: ccccd9a9349f02d4c8cd4fd4243d84a5
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 206, y: 24}
+  - name: 14 Apron race
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 433
+      y: 209
+      width: 31
+      height: 26
+    spriteID: 9284f94505e4cff438da63add9d854cb
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 213, y: -50}
+  - name: 13 Arm Front Down 2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 324
+      y: 427
+      width: 30
+      height: 64
+    spriteID: 2684de79face1504389bcbd8f1732911
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 133, y: 268}
+  - name: 12 Arm Front Up 2
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 216
+      y: 427
+      width: 47
+      height: 74
+    spriteID: 5437a7db63d10bb4aa7bcf3674090a63
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 18, y: 218}
+  - name: Sword
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 324
+      y: 499
+      width: 0
+      height: 0
+    spriteID: ac40c17763a764a47a5f1f7b0a8b1824
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -188, y: -13}
+  - name: 11 Hair Front
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 433
+      y: 127
+      width: 70
+      height: 74
+    spriteID: ac943e6d9543aa54b92b4a30e2d5c9bb
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 195, y: -192}
+  - name: 10 Head
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 371
+      width: 103
+      height: 114
+    spriteID: 4e69e784234eb9f4092f0c4a11c5a201
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -195, y: 79}
+  - name: 09 Torso
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 115
+      y: 371
+      width: 69
+      height: 113
+    spriteID: 65199ab9297c66946b1def3292e51c9d
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: -106, y: 168}
+  - name: 08 Skirt
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 216
+      y: 258
+      width: 156
+      height: 161
+    spriteID: fe0a4d696c0f6464ca8c0ad25adc5118
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 50, y: 189}
+  - name: 06 FrontLegDown
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 380
+      y: 372
+      width: 40
+      height: 108
+    spriteID: 343e74cf77ba5d541840bb4f1b5e4214
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 172, y: 372}
+  - name: 05 FrontLegUp
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 433
+      y: 4
+      width: 48
+      height: 115
+    spriteID: 7c4d89d8f7c3d4a48a67c192314fa28c
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 218, y: -74}
+  - name: 04 BackLegDown
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 470
+      y: 258
+      width: 31
+      height: 115
+    spriteID: 16947d9017dc63c4fb3b759ad51f568f
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 207, y: 258}
+  - name: 03 BackLegUp
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 380
+      y: 258
+      width: 45
+      height: 106
+    spriteID: c23ea6b410f9513408007d96db53dc7e
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 126, y: 180}
+  - name: 02 Arm Back Down
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 433
+      y: 414
+      width: 23
+      height: 64
+    spriteID: efebf27113917a54b8a3395d9b3f0e8e
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 162, y: 258}
+  - name: 01 Arm Back Up
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 271
+      y: 427
+      width: 45
+      height: 75
+    spriteID: 70f0e1729b687b74690e862e9b31a7c1
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 17, y: 220}
+  - name: Cloak Back
+    originalName: 
+    pivot: {x: 0.5, y: 0.5}
+    alignment: 0
+    border: {x: 0, y: 0, z: 0, w: 0}
+    rect:
+      serializedVersion: 2
+      x: 216
+      y: 4
+      width: 209
+      height: 246
+    spriteID: 20f3ff7cf5dd10d4ba14aab7350f0725
+    internalID: 0
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    parentGroupIndex: -1
+    uvTransform: {x: 89, y: -43}
+  platformSettings: []
+  mosaicLayers: 1
+  documentPivot: {x: 0, y: 0}
+  documentAlignment: 7
+  importHiddenLayers: 0
+  importedTextureWidth: 512
+  importedTextureHeight: 512
+  documentSize: {x: 512, y: 512}
+  paperDollMode: 0
+  keepDupilcateSpriteName: 0
+  spriteCategoryList:
+    categories: []
+  textureActualWidth: 512
+  textureActualHeight: 512
+  spritePackingTag: 
+  resliceFromLayer: 0
+  characterMode: 1
+  mosaicPSDLayers: []
+  rigPSDLayers:
+  - name: Cloak Front
+    spriteName: Cloak Front
+    isGroup: 0
+    parentIndex: -1
+    spriteID: acc726c5dd59565478def894e854c7f5
+    layerID: 30
+    mosaicPosition: {x: 4, y: 4}
+  - name: 15 SideHair
+    spriteName: 15 SideHair
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ccccd9a9349f02d4c8cd4fd4243d84a5
+    layerID: 18
+    mosaicPosition: {x: 433, y: 258}
+  - name: 14 Apron race
+    spriteName: 14 Apron race
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 9284f94505e4cff438da63add9d854cb
+    layerID: 17
+    mosaicPosition: {x: 433, y: 209}
+  - name: 13 Arm Front Down 2
+    spriteName: 13 Arm Front Down 2
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 2684de79face1504389bcbd8f1732911
+    layerID: 16
+    mosaicPosition: {x: 324, y: 427}
+  - name: 12 Arm Front Up 2
+    spriteName: 12 Arm Front Up 2
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 5437a7db63d10bb4aa7bcf3674090a63
+    layerID: 15
+    mosaicPosition: {x: 216, y: 427}
+  - name: Sword
+    spriteName: Sword
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ac40c17763a764a47a5f1f7b0a8b1824
+    layerID: 33
+    mosaicPosition: {x: 324, y: 499}
+  - name: 11 Hair Front
+    spriteName: 11 Hair Front
+    isGroup: 0
+    parentIndex: -1
+    spriteID: ac943e6d9543aa54b92b4a30e2d5c9bb
+    layerID: 14
+    mosaicPosition: {x: 433, y: 127}
+  - name: 10 Head
+    spriteName: 10 Head
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 4e69e784234eb9f4092f0c4a11c5a201
+    layerID: 13
+    mosaicPosition: {x: 4, y: 371}
+  - name: 09 Torso
+    spriteName: 09 Torso
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 65199ab9297c66946b1def3292e51c9d
+    layerID: 12
+    mosaicPosition: {x: 115, y: 371}
+  - name: 08 Skirt
+    spriteName: 08 Skirt
+    isGroup: 0
+    parentIndex: -1
+    spriteID: fe0a4d696c0f6464ca8c0ad25adc5118
+    layerID: 11
+    mosaicPosition: {x: 216, y: 258}
+  - name: 06 FrontLegDown
+    spriteName: 06 FrontLegDown
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 343e74cf77ba5d541840bb4f1b5e4214
+    layerID: 9
+    mosaicPosition: {x: 380, y: 372}
+  - name: 05 FrontLegUp
+    spriteName: 05 FrontLegUp
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 7c4d89d8f7c3d4a48a67c192314fa28c
+    layerID: 8
+    mosaicPosition: {x: 433, y: 4}
+  - name: 04 BackLegDown
+    spriteName: 04 BackLegDown
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 16947d9017dc63c4fb3b759ad51f568f
+    layerID: 7
+    mosaicPosition: {x: 470, y: 258}
+  - name: 03 BackLegUp
+    spriteName: 03 BackLegUp
+    isGroup: 0
+    parentIndex: -1
+    spriteID: c23ea6b410f9513408007d96db53dc7e
+    layerID: 6
+    mosaicPosition: {x: 380, y: 258}
+  - name: 02 Arm Back Down
+    spriteName: 02 Arm Back Down
+    isGroup: 0
+    parentIndex: -1
+    spriteID: efebf27113917a54b8a3395d9b3f0e8e
+    layerID: 5
+    mosaicPosition: {x: 433, y: 414}
+  - name: 01 Arm Back Up
+    spriteName: 01 Arm Back Up
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 70f0e1729b687b74690e862e9b31a7c1
+    layerID: 4
+    mosaicPosition: {x: 271, y: 427}
+  - name: Cloak Back
+    spriteName: Cloak Back
+    isGroup: 0
+    parentIndex: -1
+    spriteID: 20f3ff7cf5dd10d4ba14aab7350f0725
+    layerID: 31
+    mosaicPosition: {x: 216, y: 4}
+  characterData:
+    bones: []
+    parts: []
+    dimension: {x: 0, y: 0}
+    characterGroups: []
+  generateGOHierarchy: 0
+  textureAssetName: Skeletal_Future Texture
+  prefabAssetName: Skeletal_Future Prefab
+  spriteLibAssetName: Skeletal_Future Sprite Lib
+  secondarySpriteTextures: []

@@ -215,8 +215,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1d2c96a2d3ab6e49b7f5cd45e651705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  magicConsumptionPerFrame: 4
   createSpeed: 1
   maxScale: 4
+  isCreateOver: 0
   disappearSpeed: 4
   radius: 0.8
   storageSpeed: 4.5

@@ -5,23 +5,29 @@ using UnityEngine;
 public class Magic : MonoBehaviour
 {
     //魔法的所有状态值的枚举值
-    public enum MagicState { Creating, Effective, ToStorage, Storage }
+    public enum MagicState { Creating, Effective, ToStorage, Storage, Attachment}
+
+    [Header("Magic Data")]
+    public float magicConsumptionPerFrame;  //每帧魔力消耗量
+
 
     [Header("Creating State")]
     public float createSpeed;
     public float maxScale;
-
+    [HideInInspector] public bool isCreateOver;
 
     [Header("To Storage State")]
     public float disappearSpeed;
     [Header("Storage State")]
     public float radius;
     public float storageSpeed;
-    public Vector3 storageBeginLocalPos;
-    public Vector3 randomDir;
-
+    private Vector3 storageBeginLocalPos;
+    private Vector3 randomDir;
+    
+    [Header("Effect Prefabs")]
     public GameObject hitPrefab;
-    private MagicState state;
+
+    protected MagicState state;
     protected Vector3 targetScale;
 
     public virtual void Awake()
@@ -38,6 +44,8 @@ public class Magic : MonoBehaviour
     // Update is called once per frame
     public virtual void Update()
     {
+        //判断是否创建完毕魔法(不消耗魔力的阶段)
+        isCreateOver = isCreateOver || state != MagicState.Creating;
         switch (state)
         {
             case MagicState.Creating:
@@ -52,22 +60,43 @@ public class Magic : MonoBehaviour
             case MagicState.Storage:
                 Storage();
                 break;
+            case MagicState.Attachment:
+                Attachment();
+                break;
         }
     }
+    
     //创造状态下执行的动作
     public virtual void Creating()
     {
         transform.localScale = Vector3.MoveTowards(transform.localScale, targetScale, createSpeed * Time.deltaTime);
+        isCreateOver = CheckCreateOver();
     }
+    //判断创造状态是否结束
+    public virtual bool CheckCreateOver()
+    {
+        if (Vector3.Distance(transform.localScale, targetScale) < 0.1f) 
+        {
+            return true;
+        }
+        return false;
+    }
+
     //生效状态下执行的动作
     public virtual void Effective()
     { 
 
     }
+    //设置向储存状态过渡期间的参数
+    public void SetToStorageAttr(Vector3 pos)
+    {
+        transform.localPosition = pos;
+        storageBeginLocalPos = transform.localPosition;
+        randomDir = GetRandomPosInSphere();
+    }
     //向储存状态过渡期间执行的动作
     public virtual void ToStorage()
-    { 
-    
+    {
     }
     //储存期间执行的动作
     public virtual void Storage()
@@ -79,13 +108,19 @@ public class Magic : MonoBehaviour
         }
     }
 
+    //魔力附着期间的行为
+    public virtual void Attachment() 
+    {
+        
+    }
+
     //切换状态
     public void SwitchMissileState(MagicState state)
     {
         this.state = state;
     }
 
-    //创造状态跟随
+    //跟随特定目标
     public void FollowCreatingPos(Transform creatingPos)
     {
         transform.position = creatingPos.position;

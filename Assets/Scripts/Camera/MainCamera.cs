@@ -28,7 +28,7 @@ public class MainCamera : MonoBehaviour
             float x = Random.Range(-1, 1) * migration;
             float y = Random.Range(-1, 1) * migration;
 
-            transform.localPosition = new Vector3(x, y, transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x + x, transform.localPosition.y + y, transform.localPosition.z);
             curDuration += Time.deltaTime;
 
             yield return null;

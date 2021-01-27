@@ -6,15 +6,8 @@ public class MagicMissileState : PlayerMagicBasicState
 {
     public override void OnEnter(MagicSystem magicSystem, PlayerController playerController)
     {
-        playerController.isMagic = true;
-        playerController.magicKind = 0;
-        //产生飞弹
-        if (magicSystem.curMagic == null)
-        {
-            AttackMagic attackMagic = Object.Instantiate(magicSystem.attackMagicPrefabs[magicSystem.curAttackMagicKind], magicSystem.magicPos.position, Quaternion.identity).GetComponent<AttackMagic>();
-            attackMagic.SetAttackMagicType(magicSystem.curAttackMagicKind);
-            magicSystem.curMagic = attackMagic;
-        }
+        //产生攻击魔法
+        magicSystem.GenerateAttackMagic();
     }
 
     public override void OnUpdate(MagicSystem magicSystem, PlayerController playerController)
@@ -24,6 +17,7 @@ public class MagicMissileState : PlayerMagicBasicState
         
         if (playerController.isMagic && !magicButton)
         {
+            //释放攻击魔法(发射)
             magicSystem.MagicLaunch();
             //屏幕震动
             magicSystem.StartCoroutine(MainCamera.instance.Shake(magicSystem.magicLaunchCameraDuration, magicSystem.magicLaunchCameraMigration));
@@ -43,11 +37,23 @@ public class MagicMissileState : PlayerMagicBasicState
 
         if (!magicStorageButton || magicSystem.magicStorge.Count == 0)
         {
+            //魔法融合
             Time.timeScale = 1.0f;
             if (Input.GetButtonUp("Select Storage Missile"))
             {
                 magicSystem.StartCoroutine(magicSystem.MergeMagic());
             }
+        }
+
+        //武器附魔
+        if (magicSystem.curMagic != null && Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            Debug.Log("武器附魔");
+            //武器附魔
+            magicSystem.WeaponMagicAttach();
+            //切换状态
+            magicSystem.TranslateToState(magicSystem.magicDefaultState);
+            return;
         }
 
         //存储魔法
@@ -67,10 +73,13 @@ public class MagicMissileState : PlayerMagicBasicState
             return;
         }
 
-        //飞弹跟随
+        
         if (magicSystem.curMagic != null)
         {
+            //飞弹跟随
             magicSystem.curMagic.FollowCreatingPos(magicSystem.magicPos);
+            //消耗魔力
+            magicSystem.ResumeMagic(magicSystem.curMagic.magicConsumptionPerFrame);
         }
     }
 }

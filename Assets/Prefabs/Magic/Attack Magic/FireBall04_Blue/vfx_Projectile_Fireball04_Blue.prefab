@@ -38456,17 +38456,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58b2cf140437284f8dfb2c85a02b6a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  magicConsumptionPerFrame: 8
   createSpeed: 2
   maxScale: 2
-  speed: 23
-  existTime: 5
+  isCreateOver: 0
   disappearSpeed: 4
   radius: 0.8
   storageSpeed: 4.5
-  storageBeginLocalPos: {x: 0, y: 0, z: 0}
-  randomDir: {x: 0, y: 0, z: 0}
+  hitPrefab: {fileID: 1814361462553474, guid: cd0619af5899ce549b7d4ce0e319d426, type: 3}
   damage: 2
   damageForce: 2.5
+  speed: 23
+  existTime: 5
   isNormal: 1
   isDrag: 0
   isTrack: 0
@@ -38475,11 +38476,18 @@ MonoBehaviour:
   dragEffectiveScale: 0
   trackTarget: {fileID: 0}
   trackOffset: 0
+  burstRadius: 8
+  burstDamage: 8
+  burstForce: 1
+  MagicBurstEffect: {fileID: 5431391845319748575, guid: 51c86d503db8e2d42b8793948df021d4,
+    type: 3}
+  attachValuePerMagic: 0.2
+  curAttachValue: 0
+  attachLossRate: 0.01
   accuracy: 98
   fireRate: 5
   muzzlePrefab: {fileID: 1168789365331922, guid: be1e1b69b5df41d4cac77f46e151b5b2,
     type: 3}
-  hitPrefab: {fileID: 1814361462553474, guid: cd0619af5899ce549b7d4ce0e319d426, type: 3}
   trails:
   - {fileID: 1471672613751028}
   - {fileID: 1984927354528282}

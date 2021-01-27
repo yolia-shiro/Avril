@@ -6,35 +6,8 @@ public class MagicAssistState : PlayerMagicBasicState
 {
     public override void OnEnter(MagicSystem magicSystem, PlayerController playerController)
     {
-        playerController.isMagic = true;
-        if (magicSystem.curAssistMagicKind == 0)
-        {
-            //治愈魔法
-            playerController.magicKind = 2;
-        }
-        else if(magicSystem.curAssistMagicKind == 1)
-        {
-            //防御魔法
-            playerController.magicKind = 3;
-        }
-        
-        //生成魔法
-        if (magicSystem.curMagic == null)
-        {
-            AssistMagic assistMagic = null;
-            switch (magicSystem.curAssistMagicKind) 
-            {
-                case 0:
-                    assistMagic = Object.Instantiate(magicSystem.assistMagicPrefabs[magicSystem.curAssistMagicKind], 
-                        magicSystem.healPos.position, Quaternion.identity).GetComponent<AssistMagic>();
-                    break;
-                case 1:
-                    assistMagic = Object.Instantiate(magicSystem.assistMagicPrefabs[magicSystem.curAssistMagicKind],
-                        magicSystem.defensePos.position, Quaternion.identity).GetComponent<AssistMagic>();
-                    break;
-            }
-            magicSystem.curMagic = assistMagic;
-        }
+        //生成辅助魔法
+        magicSystem.GenerateAssistMagic();
     }
 
     public override void OnUpdate(MagicSystem magicSystem, PlayerController playerController)
@@ -65,9 +38,12 @@ public class MagicAssistState : PlayerMagicBasicState
             {
                 magicSystem.curMagic.SwitchMissileState(Magic.MagicState.Effective);
             }
+            magicSystem.curMagic = null;
             return;
         }
-        
+
+        //消耗魔力
+        magicSystem.ResumeMagic(magicSystem.curMagic.magicConsumptionPerFrame);
 
         #region 储存相关(暂时废弃)
         //if (!magicStorageButton || magicSystem.magicStorge.Count == 0)
