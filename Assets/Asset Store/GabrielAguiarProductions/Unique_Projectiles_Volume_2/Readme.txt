@@ -1,7 +1,3 @@
-IMPORTANT: if you are in HDRP or URP, then there's a HDRP and URP version. Import the respecitve version.
-
-
-
 Unique Projectiles Volume 2 - Readme
 
 
@@ -71,6 +67,7 @@ Warnings:
 
 
 
+
 PROJECTILE MOVE SCRIPT - DESCRIPTION:
 
 This script is only for the DEMONSTRATION of the Projectile's Visual Effects! It's not perfect.
@@ -98,13 +95,6 @@ Workflow:
 
 
 
-----NOTES----:
-ALL THE SCRIPTS are used for DEMONSTRATION porpuses of the Projectiles! They are not perfect.
-I recommend everyone to eventually create their own code for their own projects.
-Please contact me if any doubts emerge.
-
-
-
 
 CONTACTS:
 
@@ -115,6 +105,18 @@ Twitter: @GabrielAguiProd
 Facebook: facebook.com/gabrielaguiarprod/
 
 YouTube: youtube.com/c/gabrielaguiarprod
+
+
+
+
+
+
+
+
+NOTES:
+ALL THE SCRIPTS are used for DEMONSTRATION porpuses of the Projectiles! They are not perfect.
+I recommend everyone to eventually create their own code for their own projects.
+Please contact me if any doubts emerge.
 
 
 

@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e98ffbd9da5c17946bff7a22094dbbef, type: 3}
+  m_Name: Default Nihility Magic
+  m_EditorClassIdentifier: 
+  canShoot: 1
+  resumeMPInNormal: 5
+  shootPrefabs: {fileID: 1367524025346344, guid: dad88b595e4d5124082d8bd21e5a1ac5,
+    type: 3}
+  canStorageShoot: 1
+  resumeMPInStorage: 10
+  storagePrefabs: {fileID: 5996672135824719182, guid: 53027e2084c940644b815b7865b2f18a,
+    type: 3}
+  storageShootPrefabs: {fileID: 1200594170926508, guid: 757cf8551781a3d4b8367cff40c53f16,
+    type: 3}
+  storageScale: {x: 1, y: 1, z: 1}
+  storageShootScale: {x: 3, y: 3, z: 3}
+  reactionVelocity: 8
+  reactionVelocityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.10791321
+      outSlope: -0.10791321
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23892784
+    - serializedVersion: 3
+      time: 0.2056764
+      value: 0.61070657
+      inSlope: -2.7145422
+      outSlope: -2.7145422
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18461508
+      outWeight: 0.18321164
+    - serializedVersion: 3
+      time: 0.9983313
+      value: -0.0010527819
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

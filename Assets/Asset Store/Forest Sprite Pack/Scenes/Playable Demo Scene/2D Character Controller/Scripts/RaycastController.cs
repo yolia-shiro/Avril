@@ -19,11 +19,11 @@ public class RaycastController : MonoBehaviour {
 	public float verticalRaySpacing;
 
 	[HideInInspector]
-	public BoxCollider2D collider;
+	public BoxCollider2D myCollider;
 	public RaycastOrigins raycastOrigins;
 
 	public virtual void Awake() {
-		collider = GetComponent<BoxCollider2D> ();
+		myCollider = GetComponent<BoxCollider2D> ();
         
     }
 
@@ -33,7 +33,7 @@ public class RaycastController : MonoBehaviour {
     }
 
 	public void UpdateRaycastOrigins() {
-		Bounds bounds = collider.bounds;
+		Bounds bounds = myCollider.bounds;
         bounds.Expand (skinWidth * -2);
         
 
@@ -44,7 +44,7 @@ public class RaycastController : MonoBehaviour {
 	}
 	
 	public void CalculateRaySpacing() {
-		Bounds bounds = collider.bounds;
+		Bounds bounds = myCollider.bounds;
 		bounds.Expand (skinWidth * -2);
 
 		float boundsWidth = bounds.size.x;

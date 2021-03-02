@@ -20,10 +20,10 @@ public class PlayerAnimator : MonoBehaviour
     void Update()
     {
         anim.SetFloat("speed", Mathf.Abs(playerController.xAxis));
-        anim.SetBool("isJump", playerController.isJump);
-        anim.SetBool("isGround", playerController.isGround);
+        anim.SetBool("isJump", playerController.PlayerState.isJump);
+        anim.SetBool("isGround", playerController.PlayerState.isGround);
         anim.SetFloat("velocity_y", myRigidbody.velocity.y);
-        anim.SetBool("isMagic", playerController.isMagic);
-        anim.SetFloat("magicKind", playerController.magicKind);
+        anim.SetFloat("hitKind", playerController.PlayerState.hitKind);
+        anim.SetBool("isResonance", playerController.PlayerState.isMagicResonance);
     }
 }

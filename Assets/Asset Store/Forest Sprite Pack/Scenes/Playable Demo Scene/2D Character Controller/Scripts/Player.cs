@@ -33,13 +33,13 @@ public class Player : MonoBehaviour
     int wallDirX;
 
     Animator animator;
-    SpriteRenderer renderer;
+    SpriteRenderer spriteRenderer;
 
     void Start()
     {
         controller = GetComponent<Controller2D>();
         animator = GetComponent<Animator>();
-        renderer = GetComponent<SpriteRenderer>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         maxJumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -166,12 +166,12 @@ public class Player : MonoBehaviour
         //Set sprite's facing direction
         if (velocity.x > 0) //facing right
         {
-            renderer.flipX = false;
+            spriteRenderer.flipX = false;
         }
         else
         if (velocity.x < 0) //facing left
         {
-            renderer.flipX = true;
+            spriteRenderer.flipX = true;
         }
 
         animator.SetFloat("speedX", Mathf.Abs(velocity.x));
@@ -200,18 +200,18 @@ public class Player : MonoBehaviour
 
             if (iteration % 2 == 0)
             {
-                renderer.color = Color.red;
+                spriteRenderer.color = Color.red;
             }
             else
             {
-                renderer.color = Color.white;
+                spriteRenderer.color = Color.white;
             }
 
             yield return wait;
         }
 
         receivedDamage = false;
-        renderer.color = Color.white;
+        spriteRenderer.color = Color.white;
         yield return null;
     }
 }

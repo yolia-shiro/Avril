@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f01d4b26d74c4647b67cd2ebff1db99, type: 3}
+  m_Name: Default Water Magic
+  m_EditorClassIdentifier: 
+  canShoot: 1
+  resumeMPInNormal: 3
+  shootPrefabs: {fileID: 1443531423890102, guid: 7d68c699d6559aa4dbb075dd7ced416c,
+    type: 3}
+  canStorageShoot: 1
+  resumeMPInStorage: 9
+  storagePrefabs: {fileID: 2769984079514212848, guid: 1098de67bffb1fd4faf1dd9642b888c2,
+    type: 3}
+  storageShootPrefabs: {fileID: 1443531423890102, guid: 0c055b5f3febb2342be627e68a934d7d,
+    type: 3}
+  storageScale: {x: 1, y: 1, z: 1}
+  storageShootScale: {x: 1, y: 1, z: 1}
+  reactionVelocity: 0
+  reactionVelocityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  shootNum: 3
+  offsets:
+  - {x: -4, y: 18, z: 0}
+  - {x: 0, y: 18, z: 0}
+  - {x: 4, y: 18, z: 0}

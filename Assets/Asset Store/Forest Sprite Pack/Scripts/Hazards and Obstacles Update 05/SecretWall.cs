@@ -85,7 +85,7 @@ public class SecretWall : MonoBehaviour
     //Trigger the object's action when the player enters the collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Player" && !triggerFadeOut)
+        if (collision.CompareTag("Player") && !triggerFadeOut)
         {
             triggerFadeOut = true;
         }

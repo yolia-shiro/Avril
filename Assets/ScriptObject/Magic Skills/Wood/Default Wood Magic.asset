@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dcbdf02542d5bb4f9b6e93569e4a855, type: 3}
+  m_Name: Default Wood Magic
+  m_EditorClassIdentifier: 
+  canShoot: 1
+  resumeMPInNormal: 5
+  shootPrefabs: {fileID: 1284132934340704, guid: 9fa2c354447343046b2e0d6fbdc1b169,
+    type: 3}
+  canStorageShoot: 1
+  resumeMPInStorage: 10
+  storagePrefabs: {fileID: 8839958760015562455, guid: 123f049dbf0991947a16550ba17fce33,
+    type: 3}
+  storageShootPrefabs: {fileID: 1652799960059976, guid: f31675f5229059542bbe64954c4347a5,
+    type: 3}
+  storageScale: {x: 1, y: 1, z: 1}
+  storageShootScale: {x: 1, y: 1, z: 1}
+  reactionVelocity: 5
+  reactionVelocityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.10791321
+      outSlope: -0.10791321
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.23892784
+    - serializedVersion: 3
+      time: 0.2056764
+      value: 0.61070657
+      inSlope: -2.7145422
+      outSlope: -2.7145422
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.18461508
+      outWeight: 0.18321164
+    - serializedVersion: 3
+      time: 0.9983313
+      value: -0.0010527819
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  storageNum: 3
+  offsetAngle:
+  - -15
+  - 0
+  - 15

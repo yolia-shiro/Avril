@@ -32,8 +32,8 @@ Shader "GAP/AdditiveMobileDistortionScroll" {
         }
         Pass {
             Name "FORWARD"
-            Tags {
-                "LightMode"="ForwardBase"
+            Tags {                
+                "LightMode"="LightweightForward"
             }
             Blend One One
             Cull Off
@@ -42,10 +42,10 @@ Shader "GAP/AdditiveMobileDistortionScroll" {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #define UNITY_PASS_FORWARDBASE
+            //#define UNITY_PASS_FORWARDBASE
             #include "UnityCG.cginc"
             #pragma multi_compile_fwdbase
-            #pragma only_renderers d3d11 glcore gles gles3 metal 
+            //#pragma only_renderers d3d11 glcore gles gles3 metal 
             #pragma target 2.0
             uniform sampler2D _MainTexutre; uniform float4 _MainTexutre_ST;
             uniform float4 _TintColor;
